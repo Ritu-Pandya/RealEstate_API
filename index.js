@@ -25,7 +25,7 @@ app.use(bodyParser.json());
     useUnifiedTopology: true,
   
   }).then(y=>{
-    console.log("connect")
+    console.log("connect DB")
 })
 .catch((error) => {
     console.log(error);

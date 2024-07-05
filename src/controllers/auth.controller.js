@@ -19,13 +19,19 @@ export const signup = async (req, res, next) => {
     const { email, password } = req.body;
     try {
       const validUser = await User.findOne({ email:email });
-      console.log('chk22',validUser);
-      if (!validUser) return res.send("user not found");
+      if (!validUser) return res.status(404).send("User not found");
       const validPassword = bcrypt.compareSync(password, validUser.password);
-      if (!validPassword) return res.send("wrong password");
+      if (!validPassword) return res.send("Wrong Credentials!!");
       const token = jwt.sign({ id: validUser._id }, "WEFWQWE");
       
-      res.send(token);
+      res.status(201).json({
+        token,
+       
+          _id: validUser._id,
+          userName: validUser.username,
+          email: validUser.email
+        
+      });
     } catch (error) {
       
     }
