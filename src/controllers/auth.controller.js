@@ -26,7 +26,6 @@ export const signup = async (req, res, next) => {
       
       res.status(201).json({
         token,
-       
           _id: validUser._id,
           userName: validUser.username,
           email: validUser.email

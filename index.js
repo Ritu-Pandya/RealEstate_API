@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import router from './src/routes/auth.routes.js';
 import listingRouter from './src/routes/list.routes.js';
+import userRouter from './src/routes/user.routes.js';
 
 const port  = 5001;
 
@@ -33,7 +34,7 @@ app.use(bodyParser.json());
 
 app.use('/api/auth', router);
 app.use("/api/listing", listingRouter); 
-
+app.use("/api/user",userRouter);
 
   const server = app.listen(port, () => {
     const protocol = (process.env.HTTPS === true || process.env.NODE_ENV === 'production') ? 'https' : 'http';
