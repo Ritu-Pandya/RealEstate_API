@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import router from './src/routes/auth.routes.js';
 import listingRouter from './src/routes/list.routes.js';
 import userRouter from './src/routes/user.routes.js';
+import { swaggerSpec, swaggerUi } from './src/swagger.js';
 
 const port  = 5001;
 
@@ -31,6 +32,7 @@ app.use(bodyParser.json());
 .catch((error) => {
     console.log(error);
 })
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/api/auth', router);
 app.use("/api/listing", listingRouter); 
