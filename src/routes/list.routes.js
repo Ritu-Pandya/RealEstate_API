@@ -32,6 +32,61 @@ listingRouter.post("/createlist",[verifyToken], createList);
  *   get:
  *     summary: Get all listings
  *     tags: [Listing]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 9
+ *         description: The number of listings to return
+ *       - in: query
+ *         name: startIndex
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *         description: The starting index for listings
+ *       - in: query
+ *         name: offer
+ *         schema:
+ *           type: boolean
+ *           default: false
+ *         description: Filter listings based on offer status
+ *       - in: query
+ *         name: furnished
+ *         schema:
+ *           type: boolean
+ *           default: false
+ *         description: Filter listings based on furnished status
+ *       - in: query
+ *         name: parking
+ *         schema:
+ *           type: boolean
+ *           default: false
+ *         description: Filter listings based on parking availability
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *           default: all
+ *         description: Filter listings based on type (sale, rent)
+ *       - in: query
+ *         name: searchTerm
+ *         schema:
+ *           type: string
+ *           default: ''
+ *         description: Search term to filter listings by name
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           default: 'createdAt'
+ *         description: Field to sort listings by
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *           default: 'desc'
+ *         description: Order to sort listings (asc, desc)
  *     responses:
  *       200:
  *         description: A list of listings
@@ -41,6 +96,8 @@ listingRouter.post("/createlist",[verifyToken], createList);
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Listing'
+ *       400:
+ *         description: Bad request
  *       500:
  *         description: Internal server error
  */
