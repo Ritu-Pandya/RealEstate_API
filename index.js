@@ -6,8 +6,7 @@ import router from './src/routes/auth.routes.js';
 import listingRouter from './src/routes/list.routes.js';
 import userRouter from './src/routes/user.routes.js';
 import { swaggerSpec, swaggerUi } from './src/swagger.js';
-import employeeRouter from './src/routes/employee.routes.js';
-import departmentRouter from './src/routes/department.routes.js';
+
 
 const port  = 5001;
 
@@ -18,7 +17,13 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
-
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    console.error('Invalid JSON:', err.message);
+    return res.status(400).send('Invalid JSON');
+  }
+  next();
+})
   app.get("/", (req, res) => {
     res.json({ message: "Welcome to My application." });
   });
@@ -39,9 +44,12 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/auth', router);
 app.use("/api/listing", listingRouter); 
 app.use("/api/user",userRouter);
-app.use("/api/employee",employeeRouter);
-app.use("/api/department",departmentRouter);
 
+
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).send('Internal Server Error');
+});
 
   const server = app.listen(port, () => {
     const protocol = (process.env.HTTPS === true || process.env.NODE_ENV === 'production') ? 'https' : 'http';
