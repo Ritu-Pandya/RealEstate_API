@@ -6,6 +6,8 @@ import router from './src/routes/auth.routes.js';
 import listingRouter from './src/routes/list.routes.js';
 import userRouter from './src/routes/user.routes.js';
 import { swaggerSpec, swaggerUi } from './src/swagger.js';
+import employeeRouter from './src/routes/employee.routes.js';
+import departmentRouter from './src/routes/department.routes.js';
 
 const port  = 5001;
 
@@ -37,6 +39,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/auth', router);
 app.use("/api/listing", listingRouter); 
 app.use("/api/user",userRouter);
+app.use("/api/employee",employeeRouter);
+app.use("/api/department",departmentRouter);
+
 
   const server = app.listen(port, () => {
     const protocol = (process.env.HTTPS === true || process.env.NODE_ENV === 'production') ? 'https' : 'http';
