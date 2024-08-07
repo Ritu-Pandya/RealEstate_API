@@ -12,7 +12,7 @@ const port  = 5001;
 
 
 const app = express();
-app.use(cors());
+app.use(cors('*'));
 
 
 app.use(bodyParser.json());

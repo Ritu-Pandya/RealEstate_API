@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteUser, getAllUser, getAllUserData, updateUser } from '../controllers/userController.js';
+import { activateUser, deleteUser, getAllUser, getAllUserData, updateUser } from '../controllers/userController.js';
 import { verifyToken } from '../middleware/user.middleware.js';
 
 const userRouter = express.Router();
@@ -23,7 +23,7 @@ const userRouter = express.Router();
  *       500:
  *         description: Internal server error
  */
-userRouter.get('/getUserInfo', [verifyToken], getAllUserData);
+userRouter.get('/getUserInfo',  getAllUserData);
 /**
  * @swagger
  * /api/user/getUser/{id}:
@@ -52,6 +52,7 @@ userRouter.get('/getUserInfo', [verifyToken], getAllUserData);
  *         description: Internal server error
  */
 userRouter.get('/getUser/:id',[verifyToken],getAllUser);
+userRouter.get('/activate/:token', activateUser);
 /**
  * @swagger
  * /api/user/updateUser/{id}:

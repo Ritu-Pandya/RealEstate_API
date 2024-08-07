@@ -24,6 +24,22 @@ export const getAllUserData=async(req,res,next)=>{
       }
 }
 
+export const activateUser = async (req, res, next) => {
+  const { token } = req.params;
+
+  try {
+    const user = await User.findOne({ activationToken: token });
+    if (!user) return res.status(404).send("Invalid or expired activation token");
+
+    user.isActive = true;
+    user.activationToken = undefined; // Remove the token
+    await user.save();
+
+    res.status(200).send("Account activated successfully. You can now log in.");
+  } catch (error) {
+    next(error);
+  }
+};
 export const updateUser=async(req,res)=>{
   if (req.user.id !== req.params.id)
     return res.status(200).json("you can not update profile of other user");
