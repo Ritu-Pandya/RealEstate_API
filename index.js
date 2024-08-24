@@ -25,7 +25,7 @@ app.use((err, req, res, next) => {
   next();
 })
   app.get("/", (req, res) => {
-    res.json({ message: "Welcome to My application." });
+    res.json({ message: "Welcome to My Node application." });
   });
 
   mongoose
