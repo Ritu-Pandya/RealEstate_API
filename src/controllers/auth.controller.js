@@ -1,8 +1,9 @@
 import bcrypt from 'bcryptjs'
 import User from '../model/user.js';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
-import { sendActivationEmail } from '../utils/sendEmailActivation.js';
+import { sendActivationEmail, sendResetPasswordEmail } from '../utils/sendEmailActivation.js';
 
 
 export const signup = async (req, res, next) => {
@@ -40,5 +41,52 @@ export const signup = async (req, res, next) => {
       });
     } catch (error) {
       
+    }
+  };
+
+  export const forgotPassword = async (req, res, next) => {
+    const { email } = req.body;
+  
+    try {
+      const user = await User.findOne({ email });
+      if (!user) return res.status(404).send("User not found");
+  
+      const resetToken = uuidv4();
+      user.resetPasswordToken = resetToken;
+      user.resetPasswordExpires = Date.now() + 1800000; 
+  
+      await user.save();
+  
+      const frontendUrl = `http://localhost:3000/reset-password?token=${resetToken}`;
+      await sendResetPasswordEmail(user.email, frontendUrl);
+  
+      res.status(200).send("Password reset link sent to your email address");
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  export const resetPassword = async (req, res, next) => {
+    const { token } = req.body;
+    const { password } = req.body;
+  
+    try {
+      const user = await User.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: Date.now() },
+      });
+  
+      if (!user) return res.status(400).send("Invalid or expired token");
+  
+      // Hash the new password
+      user.password = await bcrypt.hash(password, 12);
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpires = undefined;
+  
+      await user.save();
+  
+      res.status(200).send("Password has been reset successfully");
+    } catch (error) {
+      next(error);
     }
   };

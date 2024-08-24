@@ -36,3 +36,22 @@ export const sendActivationEmail = (to, token) => {
       throw error;
     });
 };
+
+export const sendResetPasswordEmail = async (email, resetUrl) => {
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: 'pandyaritu99@gmail.com', 
+    pass: 'djmq dhua rcgb dobn',
+    },
+  });
+
+  const mailOptions = {
+    from: 'pandyaritu99@gmail.com',
+    to:email,
+    subject: 'Password Reset Request',
+    text: `You requested a password reset. Click the following link to reset your password: ${resetUrl}\n\nIf you did not request this, please ignore this email.`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
